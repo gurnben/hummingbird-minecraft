@@ -4,7 +4,7 @@ WORKDIR /tmp
 RUN ["/usr/bin/curl", "-O", "https://piston-data.mojang.com/v1/objects/97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51/server.jar"]
 
 # Run Minecraft server
-FROM quay.io/hummingbird/openjdk:25.0.2-runtime
+FROM quay.io/hummingbird/openjdk:25.0.3-runtime
 USER 65532
 COPY --from=downloader --chown=65532:65532 /tmp/server.jar /app/server.jar
 WORKDIR /server_files
