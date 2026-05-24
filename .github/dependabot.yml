@@ -6,7 +6,7 @@
 version: 2
 registries:
   hummingbird-openjdk:
-    type: "docker"
+    type: "docker-registry"
     url: "quay.io/hummingbird/openjdk"
 updates:
   - package-ecosystem: "docker"
