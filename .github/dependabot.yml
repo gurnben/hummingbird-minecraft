@@ -4,9 +4,14 @@
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
 version: 2
+registries:
+  hummingbird-openjdk:
+    type: "docker"
+    url: "quay.io/hummingbird/openjdk"
 updates:
   - package-ecosystem: "docker"
     directory: "/"
+    registries: "*"
     schedule:
       interval: "daily"
   - package-ecosystem: "github-actions"
