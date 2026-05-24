@@ -11,7 +11,7 @@ podman build -t hummingbird-minecraft:latest -f Containerfile
 ## Run
 
 ```bash
-podman run --replace --name minecraft-server \
+podman run -d --replace --name minecraft-server \
   -v $(pwd)/server_files:/server_files:Z,U \
   -p 25565:25565 \
   ghcr.io/pshickeydev/hummingbird-minecraft:latest
@@ -22,7 +22,10 @@ This runs the server with all persistent data (world, configs, etc.) stored in t
 ## Upgrading
 
 ```bash
-podman rm -f minecraft-server && podman run --replace --name minecraft-server \
+podman stop minecraft-server && \
+podman rm -f minecraft-server && \
+podman rmi -f ghcr.io/pshickeydev/hummingbird-minecraft:latest && \
+podman run -d --replace --name minecraft-server \
   -v $(pwd)/server_files:/server_files:Z,U \
   -p 25565:25565 \
   ghcr.io/pshickeydev/hummingbird-minecraft:latest
