@@ -40,7 +40,7 @@ jobs:
       - name: Check if update is needed
         id: check
         run: |
-          CURRENT_VERSION=$(grep -oP 'MINECRAFT_VERSION:\s*"\K[0-9.]+' .github/workflows/build-push.yaml | head -1)
+          CURRENT_VERSION=$(grep -oP 'ARG MINECRAFT_VERSION="\K[^"]+' Containerfile | head -1)
           LATEST_VERSION="${{ steps.version.outputs.latest_version }}"
           if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
             echo "No update needed. Current version $CURRENT_VERSION is already the latest."
@@ -74,12 +74,12 @@ jobs:
           BRANCH="update/minecraft-server-${LATEST_VERSION}"
           git checkout -b "$BRANCH"
 
-          CURRENT_VERSION=$(grep -oP 'MINECRAFT_VERSION:\s*"\K[0-9.]+' .github/workflows/build-push.yaml | head -1)
+          CURRENT_VERSION=$(grep -oP 'ARG MINECRAFT_VERSION="\K[^"]+' Containerfile | head -1)
 
-          sed -i "s|MINECRAFT_VERSION: \".*\"|MINECRAFT_VERSION: \"${LATEST_VERSION}\"|" .github/workflows/build-push.yaml
+          sed -i "s|ARG MINECRAFT_VERSION=\".*\"|ARG MINECRAFT_VERSION=\"${LATEST_VERSION}\"|g" Containerfile
           sed -i "s|https://piston-data.mojang.com/v1/objects/[^/]*/server.jar|${LATEST_URL}|" Containerfile
 
-          git add .github/workflows/build-push.yaml Containerfile
+          git add Containerfile
           git commit -m "chore: update Minecraft server to ${LATEST_VERSION}"
           git push -u origin "$BRANCH"
 
