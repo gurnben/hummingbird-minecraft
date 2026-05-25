@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  workflows: write
 
 jobs:
   update-minecraft:
@@ -15,6 +16,7 @@ jobs:
       id-token: write
       contents: write
       pull-requests: write
+      workflows: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
