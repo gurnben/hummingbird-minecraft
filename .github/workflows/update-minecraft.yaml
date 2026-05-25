@@ -23,14 +23,18 @@ jobs:
       - name: Get latest Minecraft server version
         id: version
         run: |
-          LATEST_VERSION=$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest.json | jq -r '.latest.release')
+          VERSION_MANIFEST=$(curl -fsSL "https://launchermeta.mojang.com/mc/game/version_manifest.json")
+          LATEST_VERSION=$(echo "$VERSION_MANIFEST" | jq -r '.latest.release')
+          MANIFEST_URL=$(echo "$VERSION_MANIFEST" | jq -r --arg ver "$LATEST_VERSION" '.versions[] | select(.id == $ver) | .url')
           echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+          echo "manifest_url=$MANIFEST_URL" >> "$GITHUB_OUTPUT"
           echo "Found latest Minecraft server version: $LATEST_VERSION"
 
-      - name: Get latest server.jar download URLs
+      - name: Get latest server.jar download URL
         id: urls
         run: |
-          LATEST_URL=$(curl -s "https://launchermeta.mojang.com/mc/game/version/${{ steps.version.outputs.latest_version }}" | jq -r '.downloads.server.url')
+          VERSION_MANIFEST=$(curl -fsSL "${{ steps.version.outputs.manifest_url }}")
+          LATEST_URL=$(echo "$VERSION_MANIFEST" | jq -r '.downloads.server.url')
           echo "latest_url=$LATEST_URL" >> "$GITHUB_OUTPUT"
 
       - name: Check if update is needed
@@ -60,7 +64,8 @@ jobs:
           GH_TOKEN: ${{ steps.octo-sts.outputs.token }}
         run: |
           LATEST_VERSION="${{ steps.version.outputs.latest_version }}"
-          LATEST_URL="${{ steps.urls.outputs.latest_url }}"
+          VERSION_MANIFEST=$(curl -fsSL "${{ steps.version.outputs.manifest_url }}")
+          LATEST_URL=$(echo "$VERSION_MANIFEST" | jq -r '.downloads.server.url')
 
           git config user.name "minecraft-update[bot]"
           git config user.email "minecraft-update[bot]@users.noreply.github.com"
@@ -71,7 +76,7 @@ jobs:
           CURRENT_VERSION=$(grep -oP 'MINECRAFT_VERSION:\s*"\K[0-9.]+' .github/workflows/build-push.yaml | head -1)
 
           sed -i "s|MINECRAFT_VERSION: \".*\"|MINECRAFT_VERSION: \"${LATEST_VERSION}\"|" .github/workflows/build-push.yaml
-          sed -i "s|https://piston-data.mojang.com/v1/objects/[^/]*/server.jar|${{ steps.urls.outputs.latest_url }}|" Containerfile
+          sed -i "s|https://piston-data.mojang.com/v1/objects/[^/]*/server.jar|${LATEST_URL}|" Containerfile
 
           git add .github/workflows/build-push.yaml Containerfile
           git commit -m "chore: update Minecraft server to ${LATEST_VERSION}"
