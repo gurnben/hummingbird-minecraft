@@ -1,7 +1,3 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "onboarding": false,
-  "platform": "github",
-  "requireConfig": "optional",
-  "repositories": []
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
 }
