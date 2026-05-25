@@ -1,6 +1,5 @@
 issuer: https://token.actions.githubusercontent.com
 subject: repo:pshickeydev/hummingbird-minecraft:workflow:.github/workflows/update-minecraft.yaml
-type: GitHub Actions OIDC
 
 permissions:
   contents: write
