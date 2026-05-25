@@ -56,7 +56,6 @@ jobs:
         with:
           scope: ${{ github.repository }}
           identity: minecraft-update
-          subject: repo:${{ github.repository }}:workflow:.github/workflows/update-minecraft.yaml
 
       - name: Update and create PR
         if: steps.check.outputs.update_needed == 'true'
