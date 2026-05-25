@@ -12,7 +12,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  MINECRAFT_VERSION: "26.1.1"
 
 jobs:
   lint:
@@ -56,6 +55,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get Minecraft version from Containerfile
+        id: mc-version
+        run: echo "version=$(grep -oP 'ARG MINECRAFT_VERSION="\K[^"]+' Containerfile)" >> "$GITHUB_OUTPUT"
+
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6
@@ -65,7 +68,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,prefix=
             type=schedule,pattern={{date 'YYYYMMDD'}}
-            type=raw,value=${{ env.MINECRAFT_VERSION }}
+            type=raw,value=${{ steps.mc-version.outputs.version }}
 
       - name: Build and push container image
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7
@@ -78,3 +81,4 @@ jobs:
           no-cache: ${{ github.event_name == 'schedule' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: MINECRAFT_VERSION=${{ steps.mc-version.outputs.version }}

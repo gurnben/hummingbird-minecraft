@@ -1,3 +1,5 @@
+ARG MINECRAFT_VERSION="26.1.1"
+
 # Download latest Minecraft server jar
 FROM quay.io/hummingbird/curl:8.20.0@sha256:98b3f40a11815db552fc525884c08f4fcb2c63d372eb402b66632e3ee5640e51 AS downloader
 WORKDIR /tmp
