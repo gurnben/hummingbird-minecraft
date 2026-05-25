@@ -28,6 +28,8 @@ podman stop minecraft-server && \
 podman rm -f minecraft-server && \
 podman rmi -f ghcr.io/pshickeydev/hummingbird-minecraft:latest && \
 podman run -d --replace --name minecraft-server \
+  --memory=3.5g --cpus=1.75 \
+  --oom-score-adjust=-500 \
   -v $(pwd)/server_files:/server_files:Z,U \
   -p 25565:25565 \
   ghcr.io/pshickeydev/hummingbird-minecraft:latest
