@@ -88,4 +88,3 @@ jobs:
             --head "$BRANCH" \
             --title "chore: update Minecraft server to ${LATEST_VERSION}" \
             --body "Automated update of the Minecraft server version. Version: ${LATEST_VERSION}. Download URL: ${LATEST_URL}" \
-            --label automated || true
