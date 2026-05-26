@@ -1,3 +1,4 @@
+ARG BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 ARG MINECRAFT_VERSION="26.1.2"
 
 # Download latest Minecraft server jar
@@ -28,3 +29,14 @@ ENTRYPOINT ["/usr/bin/java", \
   "-XX:HeapDumpPath=/server_files/", \
   "-Djava.net.preferIPv4Stack=true", \
   "-jar", "/app/server.jar", "--nogui"]
+LABEL \
+  org.opencontainers.image.created="${BUILD_DATE}" \
+  org.opencontainers.image.authors="Patrick Hickey" \
+  org.opencontainers.image.title="Hummingbird Minecraft Server" \
+  org.opencontainers.image.description="A Minecraft server container that downloads server.jar from the Microsoft Mojang source and runs on Fedora Project Hummingbird-based images" \
+  org.opencontainers.image.source="https://github.com/pshickeydev/hummingbird-minecraft" \
+  org.opencontainers.image.documentation="https://github.com/pshickeydev/hummingbird-minecraft" \
+  org.opencontainers.image.version="${MINECRAFT_VERSION}" \
+  org.opencontainers.image.licenses="SEE LICENSE(https://www.redhat.com/en/about/eulas https://www.minecraft.net/en-us/eula)" \
+  org.opencontainers.image.base.name="quay.io/hummingbird/openjdk:25.0.3-runtime" \
+  org.opencontainers.image.base.digest="sha256:1aa412d8d94fa07eccd14a928d4ffd603e52ec948b376e1280c7bef6ab02e7d2"
