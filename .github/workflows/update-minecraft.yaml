@@ -2,8 +2,8 @@ name: Update Minecraft Server
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
-    - cron: '0 0 * * *'
+    # Run daily at 17:00 UTC
+    - cron: '0 17 * * *'
   workflow_dispatch:
 
 permissions:
