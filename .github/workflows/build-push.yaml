@@ -119,7 +119,49 @@ jobs:
           timeout 60 docker run --rm --name mc-verify ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:verify 2>&1 | tee /tmp/minecraft-output.txt || true
 
       - name: Verify Minecraft server starts with EULA notice
+        id: verify-eula
+        continue-on-error: true
         run: grep -q 'You need to agree to the EULA in order to run the server' /tmp/minecraft-output.txt
+
+      - name: Open issue on verify failure
+        if: ${{ !steps.verify-eula.success && github.event_name != 'schedule' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Verify step failed on ${{ github.workflow }} (${{ github.job }})';
+            const body = [
+              'The **verify** step failed in ${{ github.workflow }}.',
+              '',
+              '### Job Details',
+              '- **Commit**: ${{ github.sha }}',
+              '- **Run URL**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
+              '- **Triggered by**: ${{ github.event_name }}',
+              '',
+              'The EULA notice was not found in the container output.',
+              'Please investigate and ensure the Minecraft server still outputs the expected EULA notice.'
+            ].join('\n');
+            
+            // Check if there's already an open issue for this job
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              label: 'verify-failure',
+            });
+            
+            const existing = issues.data.find(i => i.title === title);
+            if (existing) {
+              console.log(`Issue #${existing.number} already exists for this job`);
+              return;
+            }
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['verify-failure'],
+            });
 
   push:
     runs-on: ubuntu-latest
