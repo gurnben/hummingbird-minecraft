@@ -125,6 +125,8 @@ jobs:
         run: grep -q 'You need to agree to the EULA in order to run the server' /tmp/minecraft-output.txt
 
       - name: Open issue on verify failure
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ !steps.verify-eula.success && github.event_name != 'schedule' }}
         run: |
           TITLE="Verify step failed on ${{ github.workflow }} (${{ github.job }})"

@@ -56,7 +56,6 @@ jobs:
         id: pr
         env:
           GH_TOKEN: ${{ steps.octo-sts.outputs.token }}
-          GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
         run: |
           LATEST_VERSION="${{ steps.version.outputs.latest_version }}"
           VERSION_MANIFEST=$(curl -fsSL "${{ steps.version.outputs.manifest_url }}")
