@@ -36,6 +36,6 @@ LABEL org.opencontainers.image.description="A Minecraft server container that do
 LABEL org.opencontainers.image.source="https://github.com/pshickeydev/hummingbird-minecraft"
 LABEL org.opencontainers.image.documentation="https://github.com/pshickeydev/hummingbird-minecraft"
 LABEL org.opencontainers.image.version="${MINECRAFT_VERSION}"
-LABEL org.opencontainers.image.licenses="LicenseRef-https://www.redhat.com/en/about/eulas AND LicenseRef-https://minecraft.net/en-us/eula"
 LABEL org.opencontainers.image.base.name="quay.io/hummingbird/openjdk:25.0.3-runtime"
 LABEL org.opencontainers.image.base.digest="sha256:1aa412d8d94fa07eccd14a928d4ffd603e52ec948b376e1280c7bef6ab02e7d2"
+LABEL com.minecraft.license_terms="https://minecraft.net/en-us/eula"
