@@ -11,11 +11,12 @@ permissions:
 
 jobs:
   update-minecraft:
+    runs-on: ubuntu-latest
+
     permissions:
       id-token: write
       contents: write
-      pull-requests: write
-    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -29,13 +30,6 @@ jobs:
           echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
           echo "manifest_url=$MANIFEST_URL" >> "$GITHUB_OUTPUT"
           echo "Found latest Minecraft server version: $LATEST_VERSION"
-
-      - name: Get latest server.jar download URL
-        id: urls
-        run: |
-          VERSION_MANIFEST=$(curl -fsSL "${{ steps.version.outputs.manifest_url }}")
-          LATEST_URL=$(echo "$VERSION_MANIFEST" | jq -r '.downloads.server.url')
-          echo "latest_url=$LATEST_URL" >> "$GITHUB_OUTPUT"
 
       - name: Check if update is needed
         id: check
