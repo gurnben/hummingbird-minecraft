@@ -60,6 +60,7 @@ jobs:
           LATEST_VERSION="${{ steps.version.outputs.latest_version }}"
           VERSION_MANIFEST=$(curl -fsSL "${{ steps.version.outputs.manifest_url }}")
           LATEST_URL=$(echo "$VERSION_MANIFEST" | jq -r '.downloads.server.url')
+          TITLE="chore: update Minecraft version to ${LATEST_VERSION}"
 
           # Check if an open issue with this title already exists
           EXISTING=$(gh issue list --label mc-update --state open --json number,title --jq '.[] | select(.title == "'"'"'$TITLE'"'"') | .number' 2>/dev/null || true)
@@ -88,5 +89,5 @@ jobs:
             --base main \
             --head "$BRANCH" \
             --label mc-update \
-            --title "chore: update Minecraft server to ${LATEST_VERSION}" \
+            --title "$TITLE" \
             --body "Automated update of the Minecraft server version. Version: ${LATEST_VERSION}. Download URL: ${LATEST_URL}" \
