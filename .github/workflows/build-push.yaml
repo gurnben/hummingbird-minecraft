@@ -141,7 +141,7 @@ jobs:
             > /tmp/issue-body.md
           
           # Check if an open issue with this title already exists
-          EXISTING=$(gh issue list --label verify-failure --state open --json number,title --jq '.[] | select(.title == "'"'"'$TITLE'"'"') | .number' 2>/dev/null || true)
+          EXISTING=$(gh issue list --label verify-failure --state open --json number,title --jq --arg title "$TITLE" '.[] | select(.title == $title) | .number' 2>/dev/null || true)
           
           if [ -n "$EXISTING" ]; then
             echo "Issue #$EXISTING already exists for this job"
