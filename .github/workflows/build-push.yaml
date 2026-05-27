@@ -121,12 +121,13 @@ jobs:
         id: verify-eula
         run: grep -q 'You need to agree to the EULA in order to run the server' /tmp/minecraft-output.txt
 
-      - name: Open issue on verify failure
+      - name: Handle verify failure
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: failure()
         run: |
-          TITLE="Verify step failed on ${{ github.workflow }} (${{ github.job }})"
+          LATEST_VERSION_NUM="${{ steps.mc-version.outputs.version }}"
+          TITLE="Verify step failed for Minecraft version $LATEST_VERSION_NUM on ${{ github.workflow }} (${{ github.job }})"
           
           printf '%s\n' \
             "The **verify** step failed in ${{ github.workflow }}." \
@@ -140,15 +141,21 @@ jobs:
             "Please investigate and ensure the Minecraft server still outputs the expected EULA notice." \
             > /tmp/issue-body.md
           
-          # Check if an open issue with this title already exists
-          EXISTING=$(gh issue list --label verify-failure --state open --json number,title --jq --arg title "$TITLE" '.[] | select(.title == $title) | .number' 2>/dev/null || true)
+          # Check if an open issue for this version already exists (like update-minecraft.yaml PR check)
+          open_issues=$(gh issue list --state open --label verify-failure --json number,title 2>/dev/null || true)
+          
+          EXISTING=$(echo "$open_issues" | jq --arg ver "$LATEST_VERSION_NUM" -r '[.[] | select(.title | contains($ver))] | first | .number // empty' 2>/dev/null || true)
           
           if [ -n "$EXISTING" ]; then
-            echo "Issue #$EXISTING already exists for this job"
-            exit 0
+            echo "Commenting on existing issue #$EXISTING"
+            gh issue comment "$EXISTING" --body-file /tmp/issue-body.md
+          else
+            echo "Creating new issue"
+            gh issue create \
+              --title "$TITLE" \
+              --body-file /tmp/issue-body.md \
+              --label verify-failure
           fi
-          
-          gh issue create --title "$TITLE" --body-file /tmp/issue-body.md --label verify-failure
 
   push:
     runs-on: ubuntu-latest
