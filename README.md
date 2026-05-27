@@ -1,6 +1,6 @@
 # Hummingbird Minecraft Server
 
-A Minecraft server container that downloads server.jar from the Microsoft Mojang source and runs on Project Hummingbird-based images via Podman.
+A Minecraft server container that downloads server.jar from the Microsoft Mojang source and runs on Project Hummingbird images via Podman.
 
 ## Build
 
