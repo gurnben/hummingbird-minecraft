@@ -32,7 +32,7 @@ ENTRYPOINT ["/usr/bin/java", \
 LABEL org.opencontainers.image.created="${BUILD_DATE}"
 LABEL org.opencontainers.image.authors="Patrick Hickey"
 LABEL org.opencontainers.image.title="Hummingbird Minecraft Server"
-LABEL org.opencontainers.image.description="A Minecraft server container that downloads server.jar from the Microsoft Mojang source and runs on Fedora Project Hummingbird-based images"
+LABEL org.opencontainers.image.description="A Minecraft server container that downloads server.jar from the Microsoft Mojang source and runs on Project Hummingbird images"
 LABEL org.opencontainers.image.source="https://github.com/pshickeydev/hummingbird-minecraft"
 LABEL org.opencontainers.image.documentation="https://github.com/pshickeydev/hummingbird-minecraft"
 LABEL org.opencontainers.image.version="${MINECRAFT_VERSION}"
