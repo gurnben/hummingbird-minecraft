@@ -1,6 +1,6 @@
 # NOTES
 
-## Human Made Notes
+## Personal Notes
 
 - It can be easy to fall into the "one more game" type of mentality because starting the prompt is easier than the verification at the end. Find good stopping points for a healthy balance.
 - Workflow of telling the agent to create a TODO list then work through the items sequentially helped avoid spiraling, but not always. Instructions to work in small, discrete steps showed additional improvement, but still was no guarantee of consistent work process.
