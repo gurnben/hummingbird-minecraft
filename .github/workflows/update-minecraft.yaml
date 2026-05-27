@@ -62,32 +62,36 @@ jobs:
           LATEST_URL=$(echo "$VERSION_MANIFEST" | jq -r '.downloads.server.url')
           TITLE="chore: update Minecraft version to ${LATEST_VERSION}"
 
-          # Check if an open PR with this title already exists
-          EXISTING=$(gh pr list --label mc-update --state open --json number,title --jq --arg title "$TITLE" '.[] | select(.title == $title) | .number' 2>/dev/null || true)
+          # Check if an open PR for this version already exists
+          LATEST_VERSION_NUM="${LATEST_VERSION%%+*}"
+
+          open_prs=$(gh pr list --state open --json number,title,headRefName)
+
+          EXISTING=$(echo "$open_prs" | jq --arg ver "$LATEST_VERSION_NUM" --arg branch "update/minecraft-server-$LATEST_VERSION_NUM" -r '[.[] | select((.title | contains($ver)) and (.headRefName == $branch))] | first | .number // empty' 2>/dev/null || true)
 
           if [ -n "$EXISTING" ]; then
-            echo "PR #$EXISTING already exists for this version"
+            echo "PR #$EXISTING already exists for version $LATEST_VERSION_NUM"
             exit 0
           fi
 
           git config user.name "minecraft-update[bot]"
           git config user.email "minecraft-update[bot]@users.noreply.github.com"
 
-          BRANCH="update/minecraft-server-${LATEST_VERSION}"
+          BRANCH="update/minecraft-server-${LATEST_VERSION_NUM}"
           git checkout -b "$BRANCH"
 
           CURRENT_VERSION=$(grep -oP 'ARG MINECRAFT_VERSION="\K[^"]+' Containerfile | head -1)
 
-          sed -i "s|ARG MINECRAFT_VERSION=\".*\"|ARG MINECRAFT_VERSION=\"${LATEST_VERSION}\"|g" Containerfile
+          sed -i "s|ARG MINECRAFT_VERSION=\".*\"|ARG MINECRAFT_VERSION=\"${LATEST_VERSION_NUM}\"|g" Containerfile
           sed -i "s|https://piston-data.mojang.com/v1/objects/[^/]*/server.jar|${LATEST_URL}|" Containerfile
 
           git add Containerfile
-          git commit -m "chore: update Minecraft server to ${LATEST_VERSION}"
+          git commit -m "chore: update Minecraft server to ${LATEST_VERSION_NUM}"
           git push -u origin "$BRANCH"
 
           gh pr create \
             --base main \
             --head "$BRANCH" \
             --title "$TITLE" \
-            --body "Automated update of the Minecraft server version. Version: ${LATEST_VERSION}. Download URL: ${LATEST_URL}" \
+            --body "Automated update of the Minecraft server version. Version: ${LATEST_VERSION_NUM}. Download URL: ${LATEST_URL}" \
             --label mc-update \
