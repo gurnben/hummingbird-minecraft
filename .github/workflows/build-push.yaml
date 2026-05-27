@@ -31,7 +31,6 @@ jobs:
     needs: lint
     permissions:
       contents: read
-      packages: write
 
     steps:
       - name: Checkout repository
@@ -87,7 +86,6 @@ jobs:
     permissions:
       contents: read
       issues: write
-      packages: write
 
     steps:
       - name: Checkout repository
