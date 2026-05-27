@@ -61,6 +61,14 @@ jobs:
           VERSION_MANIFEST=$(curl -fsSL "${{ steps.version.outputs.manifest_url }}")
           LATEST_URL=$(echo "$VERSION_MANIFEST" | jq -r '.downloads.server.url')
 
+          # Check if an open issue with this title already exists
+          EXISTING=$(gh issue list --label mc-update --state open --json number,title --jq '.[] | select(.title == "'"'"'$TITLE'"'"') | .number' 2>/dev/null || true)
+          
+          if [ -n "$EXISTING" ]; then
+            echo "Issue #$EXISTING already exists for this job"
+            exit 0
+          fi
+
           git config user.name "minecraft-update[bot]"
           git config user.email "minecraft-update[bot]@users.noreply.github.com"
 
