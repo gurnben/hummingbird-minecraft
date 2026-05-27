@@ -79,5 +79,6 @@ jobs:
           gh pr create \
             --base main \
             --head "$BRANCH" \
+            --label mc-update \
             --title "chore: update Minecraft server to ${LATEST_VERSION}" \
             --body "Automated update of the Minecraft server version. Version: ${LATEST_VERSION}. Download URL: ${LATEST_URL}" \
