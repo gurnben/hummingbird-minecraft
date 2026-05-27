@@ -62,11 +62,11 @@ jobs:
           LATEST_URL=$(echo "$VERSION_MANIFEST" | jq -r '.downloads.server.url')
           TITLE="chore: update Minecraft version to ${LATEST_VERSION}"
 
-          # Check if an open issue with this title already exists
-          EXISTING=$(gh pr list --label mc-update --state open --json number,title --jq '.[] | select(.title == "'"'"'$TITLE'"'"') | .number' 2>/dev/null || true)
+          # Check if an open PR with this title already exists
+          EXISTING=$(gh pr list --label mc-update --state open --json number,title --jq --arg title "$TITLE" '.[] | select(.title == $title) | .number' 2>/dev/null || true)
 
           if [ -n "$EXISTING" ]; then
-            echo "Issue #$EXISTING already exists for this job"
+            echo "PR #$EXISTING already exists for this version"
             exit 0
           fi
 
