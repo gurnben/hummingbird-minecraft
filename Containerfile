@@ -2,7 +2,7 @@ ARG BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 ARG MINECRAFT_VERSION="26.1.2"
 
 # Download latest Minecraft server jar
-FROM registry.access.redhat.com/hi/curl:8.20.0@sha256:98b3f40a11815db552fc525884c08f4fcb2c63d372eb402b66632e3ee5640e51 AS downloader
+FROM registry.access.redhat.com/hi/curl:8.20.0@sha256:5e1350f8d7f6bbaf5cbe38fc1c9afdbd107a552e266863a75f7a935f1e502c17 AS downloader
 WORKDIR /tmp
 RUN ["/usr/bin/curl", "-O", "https://piston-data.mojang.com/v1/objects/97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51/server.jar"]
 
