@@ -26,7 +26,7 @@ These run instructions and all resource settings are based on a VPS host with 2 
 
 This runs the server with all persistent data (world, configs, etc.) stored in the local `server_files/` directory. The container is limited to 3.5GB of RAM and 1.75 of the 2 available CPUs.
 
-### JVM tuning
+## JVM tuning
 
 The JVM is configured with:
 
