@@ -8,7 +8,19 @@
 
 ## Generated Notes
 
-### Common Pitfalls and Solutions
+### Architecture Notes
+
+- The verify CI step (build, run for 60s, grep output) provides a simple but effective integration test for container images. The expected string should be something guaranteed to appear in normal startup output.
+
+- Multi-stage builds with build-time downloads keep the final image self-contained. The `:Z,U` volume mount options are necessary for SELinux-enabled systems but should be removed on non-SELinux hosts.
+
+- Chainguard STS (OIDC-based short-lived tokens, defined in `.github/chainguard/`) eliminates long-lived secret management. Each workflow's STS YAML specifies the minimal permissions needed.
+
+- Scheduling automated version checks on Tuesday/Wednesday afternoons UTC prevents PR flooding while keeping the image reasonably current.
+
+- JVM G1GC tuning is critical for game server performance. On a 4GB host, 2GB heap and 512MB metaspace leave sufficient headroom for the OS and native allocations.
+
+### OpenCode Tool Pitfalls and Solutions
 
 - **Error: File not found when reading configuration files (e.g., `opencode.json`)**
   - **Solution:** Ensure the configuration file exists in the expected directory before attempting to read it.
@@ -33,3 +45,4 @@
 
 - **Error: The user rejected permission to use a specific tool call**
   - **Solution:** Respect the user's decision. If a tool is necessary, explain why and ask for permission again, or seek an alternative way to achieve the goal.
+
