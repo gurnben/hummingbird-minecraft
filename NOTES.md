@@ -5,6 +5,7 @@
 - It can be easy to fall into the "one more game" type of mentality because starting the prompt is easier than the verification at the end. Find good stopping points for a healthy balance.
 - Workflow of telling the agent to create a TODO list then work through the items sequentially helped avoid spiraling, but not always. Instructions to work in small, discrete steps showed additional improvement, but still was no guarantee of consistent work process.
 - Models were likely trained based on container workflow which were not specific to distroless images. This caused many failed attempts to use alternative ENTRYPOINT or RUN syntax which would rely upon `/bin/sh`. These commands fail in distroless images so we need to provide full explicit paths to the binaries which are present in order to make otherwise simple things work.
+  - Turns out there are [Hummingbird AI Skills](https://gitlab.com/redhat/hummingbird/skills) which probably could have helped with this. Definitely should have looked into that earlier.
 
 ## Generated Notes
 
