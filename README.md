@@ -24,7 +24,7 @@ The `:Z,U` mount options handle SELinux relabeling and ensure the volume persist
 
 These run instructions and all resource settings are based on a VPS host with 2 vCPU and 4GB RAM. Adjust the `--memory` and `--cpus` flags for your hardware.
 
-This runs the server with all persistent data (world, configs, etc.) stored in the local `server_files/` directory. The container is limited to 3.5GB of RAM and 1.75 of the 2 available CPUs.
+This runs the server with all persistent data (world, configs, etc.) stored on the host `server_files/` directory. The container is limited to 3.5GB of RAM and 1.75 of the 2 available CPUs.
 
 ## JVM tuning
 
@@ -55,6 +55,6 @@ Your world and configuration are preserved since they live on the host in `./ser
 
 Three GitHub Actions workflows keep the project maintained:
 
-- **build-push** — Lints the Containerfile, builds the image, verifies it starts correctly, and pushes to GHCR on every `main` push.
+- **build-push** — Lints the Containerfile, builds the image, verifies it starts correctly, and pushes to GHCR on every `main` push that changes the Containerfile or the workflow itself.
 - **renovate** — Runs every 4 hours to update base image dependencies.
 - **update-minecraft** — Runs on Tue/Wed afternoons UTC to check Mojang's manifest for new Minecraft releases and opens PRs automatically.
