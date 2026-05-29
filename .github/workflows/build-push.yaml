@@ -7,6 +7,9 @@ on:
     paths:
       - .github/workflows/build-push.yaml
       - Containerfile
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 env:
@@ -158,6 +161,7 @@ jobs:
           fi
 
   push:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: [build, verify]
     permissions:
