@@ -28,11 +28,13 @@ This runs the server with all persistent data (world, configs, etc.) stored on t
 
 ## JVM tuning
 
+These JVM settings are baked into the Containerfile `ENTRYPOINT` and are applied at runtime when the image is used as-is. To adjust them for your environment, modify the `ENTRYPOINT` in the Containerfile and rebuild the image.
+
 The JVM is configured with:
 
-- 2GB heap (`-Xms2g -Xmx2g`)
-- 512MB metaspace (`-XX:MetaspaceSize=512m`)
-- G1GC tuned for game server workloads (`-XX:G1HeapRegionSize=4`, `-XX:InitiatingHeapOccupancyPercent=25`, `-XX:G1ReservePercent=10`, etc.)
+- 2GB heap (`-Xmx2G -Xms2G`)
+- 512MB max metaspace (`-XX:MaxMetaspaceSize=512M`)
+- G1GC tuned for game server workloads (`-XX:G1HeapRegionSize=16M`, `-XX:InitiatingHeapOccupancyPercent=45`, etc.)
 - NUMA awareness (`-XX:+UseNUMA`)
 - IPv4 stack (`-Djava.net.preferIPv4Stack=true`)
 
