@@ -7,7 +7,7 @@ WORKDIR /tmp
 RUN ["/usr/bin/curl", "-O", "https://piston-data.mojang.com/v1/objects/823e2250d24b3ddac457a60c92a6a941943fcd6a/server.jar"]
 
 # Run Minecraft server
-FROM registry.access.redhat.com/hi/openjdk:25.0.3-runtime@sha256:a588e27abbbbaf9c876e1b80c56056a6900aea5d79269f3a677b0839ccae61c5
+FROM registry.access.redhat.com/hi/openjdk:25.0.3-runtime@sha256:028cea486f53a200b536826d849dfd8b876eca366bea98b57b1c93a6180a1f0c
 USER 65532
 COPY --from=downloader --chown=65532:65532 /tmp/server.jar /app/server.jar
 WORKDIR /server_files
