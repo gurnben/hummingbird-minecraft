@@ -9,8 +9,10 @@ RUN ["/usr/bin/curl", "-O", "https://piston-data.mojang.com/v1/objects/823e2250d
 # Run Minecraft server
 FROM registry.access.redhat.com/hi/openjdk:25.0.3-runtime@sha256:028cea486f53a200b536826d849dfd8b876eca366bea98b57b1c93a6180a1f0c
 USER 65532
-COPY --from=downloader --chown=65532:65532 /tmp/server.jar /app/server.jar  # application binary
-WORKDIR /server_files  # persistent game data (mounted at runtime)
+# Application binary
+COPY --from=downloader --chown=65532:65532 /tmp/server.jar /app/server.jar
+# Persistent game data (mounted at runtime)
+WORKDIR /server_files
 ENTRYPOINT ["/usr/bin/java", \
   "-Xmx2G", "-Xms2G", "-Xmn512M", \
   "-XX:+UseG1GC", \
