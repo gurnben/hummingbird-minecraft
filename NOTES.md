@@ -21,29 +21,7 @@
 
 - JVM G1GC tuning is critical for game server performance. On a 4GB host, 2GB heap and 512MB metaspace leave sufficient headroom for the OS and native allocations.
 
-### OpenCode Tool Pitfalls and Solutions
+- Base image verification via the Hummingbird API (`https://api-hummingbird.hummingbird-project.io/v1/images/{name}/tags` and `https://api-hummingbird.hummingbird-project.io/v1/images/{name}/vulnerabilities/{tag}`) confirms pinned digests are current and CVE-free. Renovate automates digest updates.
 
-- **Error: File not found when reading configuration files (e.g., `opencode.json`)**
-  - **Solution:** Ensure the configuration file exists in the expected directory before attempting to read it.
-
-- **Error: `bash` tool called with invalid arguments (SchemaError: Missing key `description`)**
-  - **Solution:** Always provide a clear and concise description for every `bash` tool call to satisfy the schema requirements.
-
-- **Error: `edit` tool failed due to multiple matches for `oldString`**
-  - **Solution:** Provide more surrounding context within the `oldString` to make the target text unique within the file.
-
-- **Error: `edit` tool failed because `oldString` could not be found**
-  - **Solution:** Verify that the `oldString` exactly matches the content of the file, including whitespace, indentation, and line endings.
-
-- **Error: `write` tool called with invalid arguments (SchemaError: Missing key `filePath`)**
-  - **Solution:** Ensure every `write` tool call includes the ``filePath` parameter.
-
-- **Error: `todowrite` or `question` tool called with invalid arguments (SchemaError: Expected array)**
-  - **Solution:** Ensure that the arguments passed to `todowrite` and `question` are provided as an array of objects, following the expected schema.
-
-- **Error: `edit` tool failed because `oldString` and `newString` are identical**
-  - **Solution:** Review the change you are attempting to make; if the strings are identical, no modification will occur.
-
-- **Error: The user rejected permission to use a specific tool call**
-  - **Solution:** Respect the user's decision. If a tool is necessary, explain why and ask for permission again, or seek an alternative way to achieve the goal.
+- The `runtime` variant is preferred over `default` for Java final stages — it's a headless JRE (~100MB vs ~120MB) with no compiler or desktop dependencies.
 
