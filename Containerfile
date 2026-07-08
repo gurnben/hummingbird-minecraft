@@ -14,16 +14,16 @@ COPY --from=downloader --chown=65532:65532 /tmp/server.jar /app/server.jar
 # Persistent game data (mounted at runtime)
 WORKDIR /server_files
 ENTRYPOINT ["/usr/bin/java", \
-  "-Xmx2G", "-Xms2G", "-Xmn512M", \
+  "-Xmx12G", "-Xms12G", "-Xmn3G", \
   "-XX:+UseG1GC", \
   "-XX:+UnlockExperimentalVMOptions", \
   "-XX:MaxGCPauseMillis=200", \
-  "-XX:G1HeapRegionSize=16M", \
-  "-XX:InitiatingHeapOccupancyPercent=45", \
-  "-XX:ParallelGCThreads=2", \
+  "-XX:G1HeapRegionSize=4M", \
+  "-XX:InitiatingHeapOccupancyPercent=55", \
+  "-XX:ParallelGCThreads=4", \
   "-XX:ConcGCThreads=1", \
-  "-XX:MetaspaceSize=256M", \
-  "-XX:MaxMetaspaceSize=512M", \
+  "-XX:MetaspaceSize=512M", \
+  "-XX:MaxMetaspaceSize=1G", \
   "-XX:+AlwaysPreTouch", \
   "-XX:+UseNUMA", \
   "-XX:+DisableExplicitGC", \
